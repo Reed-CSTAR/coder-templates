@@ -15,7 +15,10 @@
         in
         pkgs.mkShell {
           # Coder will complain on a version mismatch. Update the flake as needed.
-          buildInputs = with pkgs; [ coder ];
+          buildInputs = with pkgs; [
+            coder
+            terraform
+          ];
         };
     };
 }
