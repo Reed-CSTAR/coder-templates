@@ -135,7 +135,7 @@ module "code-server" {
   agent_id = coder_agent.main.id
   order    = 1
 
-  extensions = [ "leanprover.lean4", "ShreyasSrinivas.loogle-lean" ]
+  # TODO extensions fail to build
 }
 
 # See https://registry.coder.com/modules/jetbrains-gateway
@@ -231,4 +231,3 @@ resource "docker_container" "workspace" {
     value = data.coder_workspace.me.name
   }
 }
-

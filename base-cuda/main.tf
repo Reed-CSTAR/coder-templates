@@ -188,7 +188,7 @@ resource "docker_container" "workspace" {
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
   hostname = data.coder_workspace.me.name
   # Use the docker gateway if the access URL is 127.0.0.1
-  entrypoint = ["sh", "-c", "sudo update-ca-certificates; ${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
+  entrypoint = ["sh", "-c", "apt update; apt -y install curl; update-ca-certificates; ${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
   env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
 
   # This is the only special bit we need for GPU passthrough (aside, of course, from the CUDA-enabled image). Note that we use the runtime defined in /etc/docker/daemon.json.
@@ -230,4 +230,3 @@ resource "docker_container" "workspace" {
     value = data.coder_workspace.me.name
   }
 }
-

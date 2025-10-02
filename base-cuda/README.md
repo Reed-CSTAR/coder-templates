@@ -7,7 +7,11 @@ verified: true
 tags: [docker, container]
 ---
 
-See the default 'base' image for CA cert stuff; here we just need to make sure to run with the nvidia runtime and also install curl so that coder's agent can work right.
+This is largely unmodified from the default, excepting three **very important changes.**
+
+1. The DNS servers have been set to be 10.60.2.33 and 10.60.2.34. If this isn't here, the processes inside Docker *will not* be able to resolve `patty.reed.edu`.
+2. The TLS cert used by Coder is installed.
+3. We run `sudo update-ca-certificates` before the init.
 
 # Remote Development on Docker Containers
 
@@ -48,4 +52,3 @@ This means, when the workspace restarts, any tools or files outside of the home 
 ### Editing the image
 
 Edit the `Dockerfile` and run `coder templates push` to update workspaces.
-

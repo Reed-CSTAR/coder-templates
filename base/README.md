@@ -52,4 +52,3 @@ This means, when the workspace restarts, any tools or files outside of the home 
 ### Editing the image
 
 Edit the `Dockerfile` and run `coder templates push` to update workspaces.
-
