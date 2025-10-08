@@ -133,26 +133,6 @@ module "code-server" {
   order    = 1
 }
 
-# See https://registry.coder.com/modules/jetbrains-gateway
-module "jetbrains_gateway" {
-  count  = data.coder_workspace.me.start_count
-  source = "registry.coder.com/modules/jetbrains-gateway/coder"
-
-  # JetBrains IDEs to make available for the user to select
-  jetbrains_ides = ["IU", "PS", "WS", "PY", "CL", "GO", "RM", "RD", "RR"]
-  default        = "IU"
-
-  # Default folder to open when starting a JetBrains IDE
-  folder = "/home/coder"
-
-  # This ensures that the latest version of the module gets downloaded, you can also pin the module version to prevent breaking changes in production.
-  version = ">= 1.0.0"
-
-  agent_id   = coder_agent.main.id
-  agent_name = "main"
-  order      = 2
-}
-
 resource "docker_volume" "home_volume" {
   name = "coder-${data.coder_workspace.me.id}-home"
   # Protect the volume from being deleted due to changes in attributes.
