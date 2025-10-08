@@ -160,15 +160,27 @@ resource "docker_volume" "home_volume" {
   }
 }
 
+resource "docker_image" "cstarcuda" {
+  name = "cstarcuda"
+  build {
+    context = "."
+    tag     = ["cstarcuda:develop"]
+  }
+
+  triggers = {
+    dockerfileHash = filesha256("Dockerfile")
+  }
+}
+
 resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
-  image = "nvidia/cuda:12.8.1-base-ubuntu24.04"
+  image = "cstarcuda"
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace_owner.me.name}-${lower(data.coder_workspace.me.name)}"
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
   hostname = data.coder_workspace.me.name
   # Use the docker gateway if the access URL is 127.0.0.1
-  entrypoint = ["sh", "-c", "apt update; apt -y install curl; ${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
+  entrypoint = ["sh", "-c", "${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
   env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
 
   # This is the only special bit we need for GPU passthrough (aside, of course, from the CUDA-enabled image). Note that we use the runtime defined in /etc/docker/daemon.json.
