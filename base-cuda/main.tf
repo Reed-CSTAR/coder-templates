@@ -174,7 +174,7 @@ resource "docker_image" "cstarcuda" {
 
 resource "docker_container" "workspace" {
   count = data.coder_workspace.me.start_count
-  image = "cstarcuda"
+  image = docker_image.cstarcuda.image_id
   # Uses lower() to avoid Docker restriction on container names.
   name = "coder-${data.coder_workspace_owner.me.name}-${lower(data.coder_workspace.me.name)}"
   # Hostname makes the shell more user friendly: coder@my-workspace:~$
