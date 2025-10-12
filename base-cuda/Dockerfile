@@ -5,4 +5,8 @@ USER root
 RUN apt update
 RUN apt install -y curl git unzip zip sudo
 
+# Enable passwordless sudo for main user.
+RUN groupadd -U ubuntu wheel
+ADD sudoers /etc/sudoers
+
 USER ubuntu
