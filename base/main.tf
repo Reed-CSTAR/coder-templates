@@ -218,7 +218,7 @@ resource "docker_container" "workspace" {
   }
 }
 
-
+# https://coder.com/docs/admin/templates/extending-templates/docker-in-workspaces#use-a-privileged-sidecar-container-in-docker-based-templates
 resource "docker_network" "private_network" {
   name = "network-${data.coder_workspace.me.id}"
 }
