@@ -181,7 +181,7 @@ resource "docker_container" "workspace" {
   hostname = data.coder_workspace.me.name
   # Use the docker gateway if the access URL is 127.0.0.1
   entrypoint = ["sh", "-c", "${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
-  env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}", "DOCKER_HOST=${docker_container.dind.name}:2375"]
+  env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
 
   dns = ["10.60.2.33", "10.60.2.34"]
 
@@ -211,24 +211,5 @@ resource "docker_container" "workspace" {
   labels {
     label = "coder.workspace_name"
     value = data.coder_workspace.me.name
-  }
-
-  networks_advanced {
-    name = docker_network.private_network.name
-  }
-}
-
-# https://coder.com/docs/admin/templates/extending-templates/docker-in-workspaces#use-a-privileged-sidecar-container-in-docker-based-templates
-resource "docker_network" "private_network" {
-  name = "network-${data.coder_workspace.me.id}"
-}
-
-resource "docker_container" "dind" {
-  image      = "docker:dind"
-  privileged = true
-  name       = "dind-${data.coder_workspace.me.id}"
-  entrypoint = ["dockerd", "-H", "tcp://0.0.0.0:2375"]
-  networks_advanced {
-    name = docker_network.private_network.name
   }
 }
