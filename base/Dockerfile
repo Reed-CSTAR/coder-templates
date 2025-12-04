@@ -1,6 +1,6 @@
 FROM codercom/enterprise-base:ubuntu
 
-# Switch to root for pakcage installation.
+# Switch to root for package installation.
 USER root
 
 RUN apt-get update
