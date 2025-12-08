@@ -121,6 +121,18 @@ resource "coder_agent" "main" {
   }
 }
 
+resource "coder_script" "dockerd" {
+  agent_id = coder_agent.main.id
+  display_name = "dockerd"
+  script = <<EOF
+    #!/bin/sh
+    sudo dockerd
+  EOF
+  log_path = "dockerd.log"
+  run_on_start = true
+  start_blocks_login = false
+}
+
 # See https://registry.coder.com/modules/code-server
 module "code-server" {
   count  = data.coder_workspace.me.start_count
@@ -185,6 +197,8 @@ resource "docker_container" "workspace" {
   # Use the docker gateway if the access URL is 127.0.0.1
   entrypoint = ["sh", "-c", "${replace(coder_agent.main.init_script, "/localhost|127\\.0\\.0\\.1/", "host.docker.internal")}"]
   env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
+
+  runtime = "sysbox-runc" # Required to nest Docker containers.
 
   dns = ["10.60.2.33", "10.60.2.34"]
 
