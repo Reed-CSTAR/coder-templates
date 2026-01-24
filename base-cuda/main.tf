@@ -171,7 +171,10 @@ resource "docker_image" "cstarcuda" {
   }
 
   triggers = {
+    # XXX: don't hash the entire directory; we don't want to rebuild the
+    # container when we update this file.
     dockerfileHash = filesha256("Dockerfile")
+    sudoersHash = filesha256("sudoers")
   }
 }
 
