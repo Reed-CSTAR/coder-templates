@@ -166,15 +166,14 @@ resource "docker_volume" "home_volume" {
 resource "docker_image" "cstarcuda" {
   name = "cstarcuda"
   build {
-    context = "."
+    context = "img"
     tag     = ["cstarcuda:develop"]
   }
 
   triggers = {
-    # XXX: don't hash the entire directory; we don't want to rebuild the
-    # container when we update this file.
-    dockerfileHash = filesha256("Dockerfile")
-    sudoersHash = filesha256("sudoers")
+    # There's no convenient way to hash an entire directory; do each relevant file individually.
+    dockerfileHash = filesha256("img/Dockerfile")
+    sudoersHash = filesha256("img/sudoers")
   }
 }
 

@@ -178,12 +178,12 @@ resource "docker_volume" "home_volume" {
 resource "docker_image" "cstarbase" {
   name = "cstarbase"
   build {
-    context = "."
+    context = "img"
     tag     = ["cstarbase:develop"]
   }
 
   triggers = {
-    dockerfileHash = filesha256("Dockerfile")
+    dockerfileHash = filesha256("./img/Dockerfile")
   }
 }
 
