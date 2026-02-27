@@ -199,6 +199,9 @@ resource "docker_container" "workspace" {
   env        = ["CODER_AGENT_TOKEN=${coder_agent.main.token}"]
 
   runtime = "sysbox-runc" # Required to nest Docker containers.
+  devices {
+    host_path = "/dev/fuse"
+  }
 
   dns = ["10.60.2.33", "10.60.2.34"]
 
