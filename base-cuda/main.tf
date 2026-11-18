@@ -125,7 +125,7 @@ resource "coder_agent" "main" {
 module "code-server" {
   count  = data.coder_workspace.me.start_count
   source = "registry.coder.com/modules/code-server/coder"
-  machine-settings = {
+  machine_settings = {
     "chat.disableAIFeatures" = true
   }
 
